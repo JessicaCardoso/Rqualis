@@ -15,3 +15,12 @@ LazyData: true
 RoxygenNote: 7.0.2
 URL: https://github.com/JessicaSousa/Rqualis
 BugReports: https://github.com/JessicaSousa/Rqualis/issues
+Imports: 
+    httr,
+    xml2,
+    tibble,
+    rvest,
+    glue,
+    utils,
+    dplyr,
+    readr

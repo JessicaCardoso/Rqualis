@@ -21,8 +21,8 @@ Você pode instalar a versão do Rqualis disponível no Github através do
 seguinte comando:
 
 ``` r
-#install.packages("Rqualis")
-devtools::install_github("JessicaSousa/Rqualis")
+#install.packages("remotes")
+remotes::install_github("JessicaSousa/Rqualis")
 ```
 
 ## Exemplo
@@ -50,18 +50,18 @@ print(op_event)
 op_area <- get_options(page, form = "area")
 print(op_area)
 #> # A tibble: 49 x 2
-#>    value name                                                             
-#>    <chr> <chr>                                                            
-#>  1 27    ADMINISTRAÇÃO PÚBLICA E DE EMPRESAS, CIÊNCIAS CONTÁBEIS E TURISMO
-#>  2 35    "ANTROPOLOGIA / ARQUEOLOGIA                        "             
-#>  3 29    ARQUITETURA, URBANISMO E DESIGN                                  
-#>  4 11    ARTES                                                            
-#>  5 3     "ASTRONOMIA / FÍSICA                               "             
-#>  6 7     BIODIVERSIDADE                                                   
-#>  7 48    "BIOTECNOLOGIA                                     "             
-#>  8 2     "CIÊNCIA DA COMPUTAÇÃO                             "             
-#>  9 25    "CIÊNCIA DE ALIMENTOS                              "             
-#> 10 39    "CIÊNCIA POLÍTICA E RELAÇÕES INTERNACIONAIS        "             
+#>    value name                                                               
+#>    <chr> <chr>                                                              
+#>  1 27    "ADMINISTRAÇÃO PÚBLICA E DE EMPRESAS, CIÊNCIAS CONTÁBEIS E TURISMO"
+#>  2 35    "ANTROPOLOGIA / ARQUEOLOGIA                        "               
+#>  3 29    "ARQUITETURA, URBANISMO E DESIGN"                                  
+#>  4 11    "ARTES"                                                            
+#>  5 3     "ASTRONOMIA / FÍSICA                               "               
+#>  6 7     "BIODIVERSIDADE"                                                   
+#>  7 48    "BIOTECNOLOGIA                                     "               
+#>  8 2     "CIÊNCIA DA COMPUTAÇÃO                             "               
+#>  9 25    "CIÊNCIA DE ALIMENTOS                              "               
+#> 10 39    "CIÊNCIA POLÍTICA E RELAÇÕES INTERNACIONAIS        "               
 #> # … with 39 more rows
 
 tb <- get_qualis_table(page, cod_event="14", cod_area = "2")
@@ -113,10 +113,10 @@ print(df_form)
 #>   label                                                 name          
 #>   <chr>                                                 <chr>         
 #> 1 "Evento de\n                          Classificação:" form:evento   
-#> 2 Área de Avaliação:                                    form:area     
-#> 3 ISSN:                                                 form:issn:issn
-#> 4 Título:                                               form:j_idt61  
-#> 5 Classificação:                                        form:estrato
+#> 2 "Área de Avaliação:"                                  form:area     
+#> 3 "ISSN:"                                               form:issn:issn
+#> 4 "Título:"                                             form:j_idt60  
+#> 5 "Classificação:"                                      form:estrato
 ```
 
 Agora vamos refinar busca de periódicos de computação do triênio
@@ -129,13 +129,13 @@ print(op_estrato)
 #> # A tibble: 8 x 2
 #>   value name 
 #>   <chr> <chr>
-#> 1 21    A1   
-#> 2 22    A2   
-#> 3 23    B1   
-#> 4 24    B2   
-#> 5 25    B3   
-#> 6 26    B4   
-#> 7 27    B5   
+#> 1 21    "A1" 
+#> 2 22    "A2" 
+#> 3 23    "B1" 
+#> 4 24    "B2" 
+#> 5 25    "B3" 
+#> 6 26    "B4" 
+#> 7 27    "B5" 
 #> 8 28    "C "
 ```
 
@@ -155,6 +155,7 @@ parametros <- list(
   'form' = 'form',
   'form:evento'= "14",
   'form:area' = '2',
+  "form:checkArea" =    "on",
   'form:estrato' = '21',
   "form:checkEstrato" = "on",
   'form:consultar' = 'Consultar',
@@ -165,25 +166,18 @@ resultado <- httr::POST(url, body = parametros)
 pagina <- resultado %>% httr::content('text') %>% xml2::read_html() 
 tabela <- pagina %>% rvest::html_table() %>% .[[1]]
 head(tabela)
-#>        ISSN                                  Título
-#> 1 1076-6332                      ACADEMIC RADIOLOGY
-#> 2 1046-8188 ACM TRANSACTIONS ON INFORMATION SYSTEMS
-#> 3 1000-9515         ACTA GEOLOGICA SINICA (BEIJING)
-#> 4 1474-0346        ADVANCED ENGINEERING INFORMATICS
-#> 5 0196-8858 ADVANCES IN APPLIED MATHEMATICS (PRINT)
-#> 6 0889-048X            AGRICULTURE AND HUMAN VALUES
-#>                                                   Área de Avaliação
-#> 1 ADMINISTRAÇÃO PÚBLICA E DE EMPRESAS, CIÊNCIAS CONTÁBEIS E TURISMO
-#> 2 ADMINISTRAÇÃO PÚBLICA E DE EMPRESAS, CIÊNCIAS CONTÁBEIS E TURISMO
-#> 3 ADMINISTRAÇÃO PÚBLICA E DE EMPRESAS, CIÊNCIAS CONTÁBEIS E TURISMO
-#> 4 ADMINISTRAÇÃO PÚBLICA E DE EMPRESAS, CIÊNCIAS CONTÁBEIS E TURISMO
-#> 5 ADMINISTRAÇÃO PÚBLICA E DE EMPRESAS, CIÊNCIAS CONTÁBEIS E TURISMO
-#> 6 ADMINISTRAÇÃO PÚBLICA E DE EMPRESAS, CIÊNCIAS CONTÁBEIS E TURISMO
-#>   Classificação
-#> 1            A1
-#> 2            A1
-#> 3            A1
-#> 4            A1
-#> 5            A1
-#> 6            A1
+#>        ISSN                                           Título
+#> 1 0360-0300                            ACM COMPUTING SURVEYS
+#> 2 0730-0301                     ACM TRANSACTIONS ON GRAPHICS
+#> 3 1748-7188                 ALGORITHMS FOR MOLECULAR BIOLOGY
+#> 4 1134-3060 ARCHIVES OF COMPUTATIONAL METHODS IN ENGINEERING
+#> 5 0004-3702            ARTIFICIAL INTELLIGENCE (GENERAL ED.)
+#> 6 0005-1098                              AUTOMATICA (OXFORD)
+#>       Área de Avaliação Classificação
+#> 1 CIÊNCIA DA COMPUTAÇÃO            A1
+#> 2 CIÊNCIA DA COMPUTAÇÃO            A1
+#> 3 CIÊNCIA DA COMPUTAÇÃO            A1
+#> 4 CIÊNCIA DA COMPUTAÇÃO            A1
+#> 5 CIÊNCIA DA COMPUTAÇÃO            A1
+#> 6 CIÊNCIA DA COMPUTAÇÃO            A1
 ```

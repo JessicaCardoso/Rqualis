@@ -4,10 +4,10 @@
 \alias{get_qualis_table}
 \title{Obter tabela de periódicos.}
 \usage{
-get_qualis_table(qualis_get, cod_event = "14", cod_area = "")
+get_qualis_table(qualis_page, cod_event = "14", cod_area = "")
 }
 \arguments{
-\item{sucupira_get}{refere-se o objeto gerado pela função \code{get_sucupira_page}}
+\item{qualis_page}{refere-se o objeto gerado pela função \code{get_sucupira_page}}
 
 \item{area}{refere-se a área que se deseja obter a tabela dos periódicos}
 

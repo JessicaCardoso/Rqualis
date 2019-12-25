@@ -9,7 +9,7 @@ Realiza GET na página  do \href{https://sucupira.capes.gov.br/sucupira/public/c
 get_sucupira_page()
 }
 \value{
-Retorna a operação obtida pelo GET do rvest no site do sucupira.
+Retorna a a página de Qualis do site do sucupira.
 }
 \description{
 Obter página para consultar qualis.
@@ -17,6 +17,6 @@ Obter página para consultar qualis.
 Realiza GET na página  do \href{https://sucupira.capes.gov.br/sucupira/public/consultas/coleta/veiculoPublicacaoQualis/listaConsultaGeralPeriodicos.jsf}{Sucupira}
 }
 \examples{
-sucupira_get <- get_sucupira_page()
-print(sucupira_get$headers)
+qualis_page <- get_sucupira_page()
+print(qualis_page)
 }

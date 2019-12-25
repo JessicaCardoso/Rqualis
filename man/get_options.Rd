@@ -4,10 +4,10 @@
 \alias{get_options}
 \title{Obter opções dos fórmulários.}
 \usage{
-get_options(request, form = "evento")
+get_options(sucupira_page, form = "evento")
 }
 \arguments{
-\item{request}{Objeto gerado pela função \code{get_sucupira_page}}
+\item{sucupira_page}{Objeto gerado pela função \code{get_sucupira_page}}
 
 \item{form}{Nome do campo do formulário.}
 }

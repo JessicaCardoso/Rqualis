@@ -11,6 +11,14 @@
 Esse pacote permite realizar consultas de qualis de periódicos
     disponíveis na plataforma sucupira.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/JessicaSousa/Rqualis}
+  \item Report bugs at \url{https://github.com/JessicaSousa/Rqualis/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Jessica Cardoso \email{pyrjessica@gmail.com}
 
