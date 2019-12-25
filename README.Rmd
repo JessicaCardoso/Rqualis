@@ -55,4 +55,4 @@ tb <- get_qualis_table(page, cod_event="14", cod_area = "2")
 print(head(tb))
 ```
 
-[Clique aqui](), caso você tenha interesse em fazer buscas mais detalhadas.
+[Clique aqui](https://jessicasousa.github.io/Rqualis/index.html), caso você tenha interesse em fazer buscas mais detalhadas.

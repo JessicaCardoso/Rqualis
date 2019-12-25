@@ -78,5 +78,5 @@ print(head(tb))
 #> 6 1936-1955 ACM Journal of Data and Information Quality B4
 ```
 
-[Clique aqui](), caso você tenha interesse em fazer buscas mais
-detalhadas.
+[Clique aqui](https://jessicasousa.github.io/Rqualis/index.html), caso
+você tenha interesse em fazer buscas mais detalhadas.
