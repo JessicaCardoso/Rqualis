@@ -1,0 +1,101 @@
+---
+title: "Obtendo lista de qualis periódicos através do R"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{basic-scraping-qualis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Olá, este tutorial tem dois objetivos, o primeiro é mostrar como utilizar a biblioteca `Rqualis` para obter os resultados de uma busca da página do Sucupira e o segundo objetivo é mostrar como fazer outras consultas não cobertas pela `Rqualis`.
+
+## Rqualis 
+
+Essa biblioteca permite ao usuário realizar consultas simples na página do Sucupira, onde essas consultas podem ser filtradas de acordo com uma *área* se o usuário desejar.
+
+### Instalação
+
+Como a biblioteca encontra-se disponível apenas no [Github](https://github.com/JessicaSousa/Rqualis), necessitamos do pacote `remotes` para então instalarmos o `Rqualis` em nossa máquina.
+
+```r
+install.packages("remotes")
+remotes::install_github("JessicaSousa/Rqualis")
+```
+
+### Conhecendo a biblioteca
+
+Com a `Rqualis` instalada, podemos explorar suas funcionalidades e exemplos utilizando comandos básicos do R.
+
+* `?Rqualis` ou `help(Rqualis)` irá mostrar uma página contendo a descrição e outras informações da biblioteca, podemos usar esses comandos de ajuda sobre as funções da biblioteca (Ex. `help(Rqualis::get_options)`).
+* O método `formals()`  disponível no R base retorna uma lista correspondendo as variáveis da função passada como parâmetro. Se desejarmos conhecer os argumentos da função `Rqualis::get_options` chamamos esse método.
+  * `formals(Rqualis::get_options)` e teremos como resposta uma lista contendo os nomes dos argumentos, a variável *$form* tem um valor padrão "evento".
+* Se desejar ver o corpo da função você pode usar o método `body()`, no nosso exemplo acima seria `body(Rqualis::get_options)`.
+
+### Recuperando periódicos
+
+O processo de obter a lista de periódicos através da `Rqualis` conta com alguns passos:
+
+1. Obter a página do sucupira, no caso acesso ao endereço onde se encontram os Qualis de periódicos.
+   1. `page <-  get_sucupira_page()`
+2. Identificar qual evento desejamos obter a lista de *qualis*, se é **triênio** ou **quadriênio**.
+   1. `op_event <- get_options(page, form = "evento")`
+3. Identificar a área desejada (*opcional*)
+   1. `op_area <- get_options(page, form = "area")`
+4. Por fim, obter a tabela com os resultados através da função `get_qualis_table`.
+
+```{r example}
+library(Rqualis)
+
+# Obter página do sucupira
+page <- get_sucupira_page()
+
+# Obter a tabela de evento para saber qual código do triênio 2010-2012 
+op_event <- get_options(page, form = "evento")
+print(op_event) # código 14
+
+# Descobrir qual código corresponde a área de computação 
+op_area <- get_options(page, form = "area")
+print(op_area) # código 2
+
+# Pegamos o valor retornado e colocamos na busca
+tb <- get_qualis_table(page, cod_event="14", cod_area = "2") # Apenas ciência da computação
+# tb <- get_qualis_table(page, cod_event="14") # todos os cursos
+print(head(tb))
+```
+
+
+
+## Outros critérios de consulta
+
+Como podemos notar a biblioteca permite apenas filtrar resultados com base em uma área, se desejarmos filtrar por classificação ou periódico específico, não é possível. Na página do Sucupira podemos buscar por área, classificação, título da revista e ISSN. Para que possamos realizar os mesmos tipos de busca, podemos obter a tabela contendo todos os cursos através da função `get_qualis_table` e filtrar a tabela com o `dplyr` ou `data.table`.
+
+```r
+library(Rqualis)
+
+op_event <- get_options(page, form = "evento")
+print(op_event)
+```
+
+```{r all_areas}
+tb <- get_qualis_table(page, cod_event="14")
+head(tb)
+```
+
+Por exemplo, vamos filtrar a tabela acima para retornar apenas periódicos de conceito A1 da área de ciência da computação. Para isso iremos utilizar a biblioteca `dplyr`, aqui usamos o `head` para mostrar as primeiras 10 linhas do `data.frame`.
+
+```{r filtered}
+library(dplyr)
+res <- filter(tb, `Área de Avaliação` == "CIÊNCIA DA COMPUTAÇÃO" & Estrato == 'A1')
+head(res, n = 10)
+```
+
+
+
+Então é isso :)

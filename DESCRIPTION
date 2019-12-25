@@ -24,3 +24,7 @@ Imports:
     utils,
     dplyr,
     readr
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -50,71 +50,9 @@ print(op_event)
 op_area <- get_options(page, form = "area")
 print(op_area)
 
+# Pegamos o valor retornado e colocamos na busca
 tb <- get_qualis_table(page, cod_event="14", cod_area = "2")
 print(head(tb))
-
-# Pegamos o valor retornado e colocamos na busca
 ```
 
-Caso você esteja interessado em fazer buscas mais detalhes sobre Qualis no site do Sucupira, você pode fazer isso através das bibliotecas `rvest` e `httr`, ambas disponíves no [CRAN](https://cran.r-project.org/). 
-
-```{r eval=FALSE}
-install.packages(c('rvest', 'httr'))
-```
-
-Após instalar ambas bibliotecas, para efetuar consultas na página de periódico é necessário obter o nome dos campos dos formulários da página. No exemplo abaixo estou usando o operador pipe (`%>%`) disponível na biblioteca `magrittr`.
-
-```{r}
-library(magrittr)
-library(tibble)
-
-#Obter a região do html correspondente ao formulário de busca
-# formulário está marcado com a classe form-group
-qualis_form <- page %>% rvest::html_nodes('.form-group')
-          
-
-df_form <- tibble(label = rvest::html_nodes(qualis_form, 'label') %>% 
-                          rvest::html_text(),
-                  name = qualis_form %>%
-                         rvest::html_nodes('.form-control') %>% 
-                         rvest::html_attr('name')
-                  )
-print(df_form)
-```
-
-Agora vamos refinar busca de periódicos de computação do triênio 2010-2012, para filtrar de acordo com a classificação. Utilizando a mesma função `get_options` vamos obter a lista de classificações.
-
-```{r}
-op_estrato <- get_options(page, form = "estrato")
-print(op_estrato)
-
-```
-
-Escolhemos filtrar os periódicos com classificação A1, para isso inserimos o valor 21 no campo específico ao estrato.
-
-```{r}
-
-url <- "https://sucupira.capes.gov.br/sucupira/public/consultas/coleta/veiculoPublicacaoQualis/listaConsultaGeralPeriodicos.xhtml"
-
-#Obter ViewState da Página do Sucupira
-viewstate <- page %>%
-  rvest::html_node(xpath = "//*[@id=\"javax.faces.ViewState\"]") %>%
-  rvest::html_attr("value")
-
-parametros <- list(
-  'form' = 'form',
-  'form:evento'= "14",
-  'form:area' = '2',
-  "form:checkArea" =	"on",
-  'form:estrato' = '21',
-  "form:checkEstrato" =	"on",
-  'form:consultar' = 'Consultar',
-  'javax.faces.ViewState' = viewstate
-)
-
-resultado <- httr::POST(url, body = parametros)
-pagina <- resultado %>% httr::content('text') %>% xml2::read_html() 
-tabela <- pagina %>% rvest::html_table() %>% .[[1]]
-head(tabela)
-```
-
+[Clique aqui](), caso você tenha interesse em fazer buscas mais detalhadas.
